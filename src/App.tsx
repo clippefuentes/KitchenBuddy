@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
+import { Theme, Button } from 'react-daisyui'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,6 +16,16 @@ function App() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
+      <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
+      <Theme dataTheme="dark">
+        <Button color="primary">Click me, dark!</Button>
+      </Theme>
+
+      <Theme dataTheme="light">
+        <Button color="primary">Click me, light!</Button>
+      </Theme>
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={() => setCount((count: number) => count + 1)}>
