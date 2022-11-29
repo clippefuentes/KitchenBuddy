@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '@components/Root/Header';
 import Tab from '@components/Root/Tab';
-
+import { Outlet } from "react-router-dom";
 import useRootHook from './hooks/useRootHooks'
 
 function Root() {
@@ -12,6 +12,7 @@ function Root() {
         handleMenu={handleMenu} 
       />
       <Tab isOpen={isOpenMenu} handleMenu={handleMenu} />
+      <Outlet />
     </div>
   )
 }
