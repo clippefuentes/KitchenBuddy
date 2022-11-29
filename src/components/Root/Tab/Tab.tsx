@@ -18,6 +18,8 @@ function Tab(props: TabProps) {
       text: 'Home',
     }, {
       text: 'Profile'
+    }, {
+      text: 'Timer'
     }
   ]
 
