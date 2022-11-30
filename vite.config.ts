@@ -11,6 +11,7 @@ export default defineConfig({
     alias: {
       "@components": toPath("src/components"),
       "@pages": toPath("src/pages"),
+      "@hooks": toPath("src/hooks"),
     }
   }
 })

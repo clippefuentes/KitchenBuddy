@@ -1,5 +1,8 @@
 .root-drawer {
   &.drawer {
+    // width: 20em;
+  }
+  & > .drawer-side {
     width: 20em;
   }
 }
