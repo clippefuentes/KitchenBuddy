@@ -9,7 +9,7 @@ function Timer() {
   
   useEffect(() => {
     const timer = setTimeout(() => {
-      setValue((v) => (v <= 0 ? 999 : v - 1))
+      setValue((v) => (v <= 0 ? 99 : v - 1))
     }, 1000)
 
     return () => {
@@ -18,9 +18,9 @@ function Timer() {
   }, [value])
 
   return (
-    <Hero className="flex justify-center">
+    <Hero className="flex justify-center items-center h-full">
       {/* <Outlet /> */}
-      <Hero.Content className="text-center">
+      <Hero.Content className="text-center bg-neutral">
         <Countdown className="text-2xl" value={value} />
       </Hero.Content>
     </Hero>
