@@ -4,8 +4,14 @@ import {
   Countdown
 } from 'react-daisyui';
 
+enum Mode {
+  Edit,
+  Countdown
+}
+
 function Timer() {
   const [value, setValue] = useState<number>(99)
+  const [mode, setMode] = useState<Mode>(Mode.Edit)
   
   useEffect(() => {
     const timer = setTimeout(() => {
