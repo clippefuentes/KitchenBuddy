@@ -1,11 +1,15 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+
 import {
   secondsToMilliseconds,
   minutesToMilliseconds,
   hoursToMilliseconds,
+  hoursToSeconds,
+  minutesToSeconds,
   differenceInHours,
   differenceInMinutes,
-  differenceInSeconds
+  differenceInSeconds,
+  intervalToDuration
 } from 'date-fns'
 
 export enum Mode {
@@ -21,42 +25,72 @@ function useTimerHooks() {
   const [seconds, setSeconds] = useState(0)
   const [timer, setTimer] = useState<Interval>(0)
   const [mode, setMode] = useState<Mode>(Mode.Edit)
-  
-  const dateToAlarm = () => {
+
+  const dateInSeconds = () => {
+    const minutesToTimeStamp = minutesToSeconds(minutes);
+    const hoursToTimestamp = hoursToSeconds(hours);
+    // return secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp;
+    const totalSeconds =  seconds + minutesToTimeStamp + hoursToTimestamp
+    return seconds + minutesToTimeStamp + hoursToTimestamp
+  }
+
+  const dateToAlarm = (date: number) => {
     const secondsToTimestamp = secondsToMilliseconds(seconds);
     const minutesToTimeStamp = minutesToMilliseconds(minutes);
     const hoursToTimestamp = hoursToMilliseconds(hours);
     // return secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp;
-    return new Date(Date.now() + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp));
+    console.log('secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp', secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp)
+    // console.log('Date.now()', Date.now())
+    return new Date(date + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp)) || 0;
   };
 
+  // const timeLeft = intervalToDuration({
+  //   start: new Date(),
+  //   end: dateToAlarm(),
+  // })
+  
+
+
+
   const startTimer = () => {
-    setMode(Mode.Countdown)
-    const timerInterval = setInterval(() => {
-      const hoursDiff = differenceInHours(
-        dateToAlarm(),
-        new Date()
-      );
-
-      const minutesDiff = differenceInMinutes(
-        dateToAlarm(),
-        new Date()
-      )
-
-      const secondsDiff = differenceInSeconds(
-        dateToAlarm(),
-        new Date()
-      )
-      console.log('hoursDiff', hoursDiff)
-      console.log('minutesDiff', minutesDiff)
-      console.log('secondsDiff', secondsDiff)
+    // setMode(Mode.Countdown)
+    // const timerInterval = setInterval(runTimer, 1000)
+    console.log('dateToAlarm(Date.now())', dateToAlarm(Date.now()))
+    console.log('new Date()', new Date())
+    const secondsToTimestamp = secondsToMilliseconds(seconds);
+    const minutesToTimeStamp = minutesToMilliseconds(minutes);
+    const hoursToTimestamp = hoursToMilliseconds(hours);
+    const endDate = new Date((Date.now() + 2000) + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp))
+    const timer = setInterval(() => {
+      const {
+        hours,
+        minutes,
+        seconds
+      } = intervalToDuration({
+        start: new Date(),
+        end: endDate,
+      })
+      setSeconds(seconds || 0)
+      setMinutes(minutes || 0)
+      setHours(hours || 0)
     }, 1000)
-
-    setTimer(timerInterval)
+    setTimer(timer)
   }
 
   const stopTimer = () => {
     clearInterval(timer)
+  }
+
+  const runTimer = () => {
+    console.log('seconds',seconds)
+    if (seconds !== 0) {
+      setSeconds((currentSecond) => {
+        console.log('currentSecond', currentSecond)
+        return currentSecond - 1
+      })
+    } else {
+      setSeconds
+    }
   }
 
   const addSubHours = (num: number) => {
@@ -92,6 +126,20 @@ function useTimerHooks() {
     })
   }
 
+  // useEffect(() => {
+  //   timer.reset()
+  //   const minutesToTimeStamp = minutesToSeconds(minutes);
+  //   const hoursToTimestamp = hoursToSeconds(hours);
+  //   // return secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp;
+  //   const totalSeconds =  seconds + minutesToTimeStamp + hoursToTimestamp;
+  //   console.log('totalSeconds', totalSeconds)
+  //   timer.advanceTime(-totalSeconds)
+  // }, [hours, minutes, seconds])
+
+  // useEffect(() => {
+  //   console.log(timeLeft)
+  // }, [timeLeft])
+
   return {
     hours,
     setHours,
@@ -99,15 +147,16 @@ function useTimerHooks() {
     setMinutes,
     seconds,
     setSeconds,
-    setTimer,
+    // setTimer,
     timer,
     mode,
     setMode,
     startTimer,
-    stopTimer,
+    // stopTimer,
     addSubHours,
     addSubMinutes,
-    addSubSeconds
+    addSubSeconds,
+    dateInSeconds
   }
 }
 

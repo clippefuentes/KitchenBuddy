@@ -21,7 +21,15 @@ function Timer() {
     setHours,
     setMinutes,
     setSeconds,
-  } = userTimerHooks()
+    startTimer,
+    setMode,
+    // Mode
+  } = userTimerHooks();
+
+  const startCountdown = () => {
+    // setMode(Mode.Countdown)
+  }
+  
   return (
     <Hero className="flex justify-center items-center h-full">
       {/* <Outlet /> */}
@@ -38,6 +46,7 @@ function Timer() {
           addSubMinutes={addSubMinutes}
           addSubSeconds={addSubSeconds}
         />
+        <Button onClick={startTimer}>Start</Button>
       </Hero.Content>
     </Hero>
   )

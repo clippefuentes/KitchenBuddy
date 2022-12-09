@@ -4,7 +4,6 @@ import {
   Input
 } from 'react-daisyui';
 
-
 interface EditTimerProps {
   hours: number,
   minutes: number,
@@ -14,7 +13,8 @@ interface EditTimerProps {
   addSubSeconds: (num: number) => void,
   setHours: React.Dispatch<React.SetStateAction<number>>,
   setMinutes: React.Dispatch<React.SetStateAction<number>>,
-  setSeconds: React.Dispatch<React.SetStateAction<number>>
+  setSeconds: React.Dispatch<React.SetStateAction<number>>,
+  // timer: ReturnValue
 }
 
 const EditTimer = ({
@@ -27,9 +27,16 @@ const EditTimer = ({
   addSubHours,
   addSubMinutes,
   addSubSeconds,
+  // timer,
 }: EditTimerProps) => {
 
-  const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<number>>, max: number) => {
+  const handleChangeValue = 
+  (
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: React.Dispatch<React.SetStateAction<number>>,
+    max: number,
+    
+  ) => {
     const value = Number(e.target.value);
     if (value <= max && value >= 0) {
       setter(value)
