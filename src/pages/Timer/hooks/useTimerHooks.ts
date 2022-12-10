@@ -53,14 +53,26 @@ function useTimerHooks() {
 
 
   const startTimer = () => {
-    // setMode(Mode.Countdown)
+    setMode(Mode.Countdown)
     // const timerInterval = setInterval(runTimer, 1000)
     console.log('dateToAlarm(Date.now())', dateToAlarm(Date.now()))
     console.log('new Date()', new Date())
     const secondsToTimestamp = secondsToMilliseconds(seconds);
     const minutesToTimeStamp = minutesToMilliseconds(minutes);
     const hoursToTimestamp = hoursToMilliseconds(hours);
-    const endDate = new Date((Date.now() + 2000) + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp))
+    // const endDate1 = new Date((Date.now()) + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp))
+    // const {
+    //   hours: hoursCur,
+    //   minutes: minutesCur,
+    //   seconds: secondsCur
+    // } = intervalToDuration({
+    //   start: new Date(),
+    //   end: endDate1,
+    // })
+    // setSeconds(hoursCur || 0)
+    // setMinutes(minutesCur || 0)
+    // setHours(secondsCur || 0)
+    const endDate = new Date((Date.now() + 1000) + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp))
     const timer = setInterval(() => {
       const {
         hours,
@@ -79,6 +91,7 @@ function useTimerHooks() {
 
   const stopTimer = () => {
     clearInterval(timer)
+    setMode(Mode.Edit)
   }
 
   const runTimer = () => {
@@ -152,7 +165,7 @@ function useTimerHooks() {
     mode,
     setMode,
     startTimer,
-    // stopTimer,
+    stopTimer,
     addSubHours,
     addSubMinutes,
     addSubSeconds,

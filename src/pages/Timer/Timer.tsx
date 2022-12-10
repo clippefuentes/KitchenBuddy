@@ -7,7 +7,7 @@ import {
 } from 'react-daisyui';
 
 import EditTimer from './components/EditTimer';
-import userTimerHooks from './hooks/useTimerHooks';
+import userTimerHooks, { Mode } from './hooks/useTimerHooks';
 
 
 function Timer() {
@@ -22,8 +22,9 @@ function Timer() {
     setMinutes,
     setSeconds,
     startTimer,
+    stopTimer,
     setMode,
-    // Mode
+    mode,
   } = userTimerHooks();
 
   const startCountdown = () => {
@@ -35,18 +36,45 @@ function Timer() {
       {/* <Outlet /> */}
       <Hero.Content className="text-center bg-neutral flex flex-col w-2/5">
         {/* <Countdown className="text-2xl" value={value} /> */}
-        <EditTimer
-          hours={hours}
-          minutes={minutes}
-          seconds={seconds}
-          setHours={setHours}
-          setMinutes={setMinutes}
-          setSeconds={setSeconds}
-          addSubHours={addSubHours}
-          addSubMinutes={addSubMinutes}
-          addSubSeconds={addSubSeconds}
-        />
-        <Button onClick={startTimer}>Start</Button>
+        
+        {
+          Mode.Edit === mode ? (
+            <EditTimer
+              hours={hours}
+              minutes={minutes}
+              seconds={seconds}
+              setHours={setHours}
+              setMinutes={setMinutes}
+              setSeconds={setSeconds}
+              addSubHours={addSubHours}
+              addSubMinutes={addSubMinutes}
+              addSubSeconds={addSubSeconds}
+            />
+          ): (
+              <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
+                <div className="flex flex-col">
+                  <Countdown className="font-mono text-5xl" value={hours} />
+                  hours
+                </div>
+                <div className="flex flex-col">
+                  <Countdown className="font-mono text-5xl" value={minutes} />
+                  min
+                </div>
+                <div className="flex flex-col">
+                  <Countdown className="font-mono text-5xl" value={seconds} />
+                  sec
+                </div>
+              </div>
+          )
+      }
+        {
+          Mode.Edit === mode ? (
+            <Button onClick={startTimer}>Start</Button>
+          ) : (
+            <Button onClick={stopTimer}>Stop</Button>
+          )
+        }
+        
       </Hero.Content>
     </Hero>
   )
