@@ -24,6 +24,8 @@ function Timer() {
     startTimer,
     stopTimer,
     setMode,
+    pauseTimer,
+    resetTimer,
     mode,
   } = userTimerHooks();
 
@@ -69,9 +71,13 @@ function Timer() {
       }
         {
           Mode.Edit === mode ? (
-            <Button onClick={startTimer}>Start</Button>
+            <Button className='w-full' onClick={startTimer} color="secondary">Start</Button>
           ) : (
-            <Button onClick={stopTimer}>Stop</Button>
+            <div className='flex w-full justify-between'>
+              <Button className='w-3/12 px-1' onClick={stopTimer} color="error">Stop</Button>
+              <Button className='w-3/12 px-1' onClick={pauseTimer} color="warning">Pause</Button>
+              <Button className='w-3/12 px-1' onClick={resetTimer} color="info">Reset</Button>
+            </div>
           )
         }
         

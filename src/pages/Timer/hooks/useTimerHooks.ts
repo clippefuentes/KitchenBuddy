@@ -14,7 +14,7 @@ import {
 
 export enum Mode {
   Edit,
-  Countdown
+  Countdown,
 }
 
 type Interval = string | number | NodeJS.Timeout | undefined
@@ -25,6 +25,10 @@ function useTimerHooks() {
   const [seconds, setSeconds] = useState(0)
   const [timer, setTimer] = useState<Interval>(0)
   const [mode, setMode] = useState<Mode>(Mode.Edit)
+
+  const [choosenHours, setChoosenHours] = useState(0)
+  const [choosenMinutes, setChoosenMinutes] = useState(0)
+  const [choosenSeconds, setChoosenSeconds] = useState(0)
 
   const dateInSeconds = () => {
     const minutesToTimeStamp = minutesToSeconds(minutes);
@@ -52,14 +56,33 @@ function useTimerHooks() {
 
 
 
-  const startTimer = () => {
+  const startTimer = (_e: any, reset = false) => {
     setMode(Mode.Countdown)
     // const timerInterval = setInterval(runTimer, 1000)
     console.log('dateToAlarm(Date.now())', dateToAlarm(Date.now()))
     console.log('new Date()', new Date())
-    const secondsToTimestamp = secondsToMilliseconds(seconds);
-    const minutesToTimeStamp = minutesToMilliseconds(minutes);
-    const hoursToTimestamp = hoursToMilliseconds(hours);
+    let secondsToTimestamp
+    let minutesToTimeStamp
+    let hoursToTimestamp
+    console.log('reset', reset)
+    if (reset) {
+      setSeconds(choosenSeconds)
+      setMinutes(choosenMinutes)
+      setHours(choosenHours)
+      secondsToTimestamp = secondsToMilliseconds(choosenSeconds);
+      minutesToTimeStamp = minutesToMilliseconds(choosenMinutes);
+      hoursToTimestamp = hoursToMilliseconds(choosenHours);
+    } else {
+      secondsToTimestamp = secondsToMilliseconds(seconds);
+      minutesToTimeStamp = minutesToMilliseconds(minutes);
+      hoursToTimestamp = hoursToMilliseconds(hours);
+      setChoosenHours(hours)
+      setChoosenMinutes(minutes)
+      setChoosenSeconds(seconds)
+    }
+
+
+
     // const endDate1 = new Date((Date.now()) + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp))
     // const {
     //   hours: hoursCur,
@@ -72,6 +95,7 @@ function useTimerHooks() {
     // setSeconds(hoursCur || 0)
     // setMinutes(minutesCur || 0)
     // setHours(secondsCur || 0)
+    console.log('secondsToTimestamp', secondsToTimestamp)
     const endDate = new Date((Date.now() + 1000) + (secondsToTimestamp + minutesToTimeStamp + hoursToTimestamp))
     const timer = setInterval(() => {
       const {
@@ -82,9 +106,16 @@ function useTimerHooks() {
         start: new Date(),
         end: endDate,
       })
-      setSeconds(seconds || 0)
-      setMinutes(minutes || 0)
-      setHours(hours || 0)
+
+      if (seconds === 0 && minutes === 0 && hours === 0) {
+        stopTimer();
+        clearInterval(timer);
+        return
+      } else {
+        setSeconds(seconds || 0)
+        setMinutes(minutes || 0)
+        setHours(hours || 0)
+      }
     }, 1000)
     setTimer(timer)
   }
@@ -92,6 +123,25 @@ function useTimerHooks() {
   const stopTimer = () => {
     clearInterval(timer)
     setMode(Mode.Edit)
+    setSeconds(0)
+    setMinutes(0)
+    setHours(0)
+  }
+
+  const pauseTimer = () => {
+    clearInterval(timer)
+    setMode(Mode.Edit)
+    setSeconds(seconds || 0)
+    setMinutes(minutes || 0)
+    setHours(hours || 0)
+  }
+
+  const resetTimer = () => {
+    clearInterval(timer)
+    // setSeconds(choosenSeconds)
+    // setMinutes(choosenMinutes)
+    // setHours(choosenHours)
+    startTimer({}, true)
   }
 
   const runTimer = () => {
@@ -169,7 +219,9 @@ function useTimerHooks() {
     addSubHours,
     addSubMinutes,
     addSubSeconds,
-    dateInSeconds
+    dateInSeconds,
+    pauseTimer,
+    resetTimer
   }
 }
 
